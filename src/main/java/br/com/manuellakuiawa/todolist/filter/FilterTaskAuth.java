@@ -3,22 +3,29 @@ package br.com.manuellakuiawa.todolist.filter;
 import java.io.IOException;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-@Component //toda classe que quer que o spring gerencie coloca essa anotation
-public class FilterTaskAuth implements Filter {
+@Component // toda classe que quer que o spring gerencie coloca essa anotation
+public class FilterTaskAuth extends OncePerRequestFilter {
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        //pegar a autenticação (usuario e senha)
+        var authorization = request.getHeader("Authorization");
+        System.out.println("Authorization");
+        System.out.println(authorization);
+        //validar usuário 
 
-        System.out.println("Chegou no filtro");
-        chain.doFilter(request, response);
+        //validar senha 
+
+        filterChain.doFilter(request, response);
     }
 
 }
