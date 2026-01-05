@@ -3,9 +3,11 @@ package br.com.manuellakuiawa.todolist.filter;
 import java.io.IOException;
 import java.util.Base64;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import br.com.manuellakuiawa.todolist.user.IUserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,16 +16,19 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component // toda classe que quer que o spring gerencie coloca essa anotation
 public class FilterTaskAuth extends OncePerRequestFilter {
 
+    @Autowired
+    private IUserRepository userRepository;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        //pegar a autenticação (usuario e senha)
+        // pegar a autenticação (usuario e senha)
         var authorization = request.getHeader("Authorization");
 
-        var authEncoded = authorization.substring("Basic".length()).trim(); //extrair conteudo (basic)
+        var authEncoded = authorization.substring("Basic".length()).trim(); // extrair conteudo (basic)
 
-        byte[] authDecode =  Base64.getDecoder() .decode(authEncoded);
+        byte[] authDecode = Base64.getDecoder().decode(authEncoded);
 
         var authString = new String(authDecode);
 
@@ -31,14 +36,18 @@ public class FilterTaskAuth extends OncePerRequestFilter {
         String username = credentials[0];
         String password = credentials[1];
 
-        System.out.println(username);
-        System.out.println(password);
+        // validar usuário
+        var user = this.userRepository.findByUsername(username);
 
-        //validar usuário 
-        
-        //validar senha 
+        if (user == null) {
+            response.sendError(401);
+        } else {
 
-        filterChain.doFilter(request, response);
+            // validar senha
+
+            filterChain.doFilter(request, response);
+        }
+
     }
 
 }
