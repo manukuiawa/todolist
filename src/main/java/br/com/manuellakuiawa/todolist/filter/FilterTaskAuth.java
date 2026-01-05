@@ -1,6 +1,7 @@
 package br.com.manuellakuiawa.todolist.filter;
 
 import java.io.IOException;
+import java.util.Base64;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,9 +21,18 @@ public class FilterTaskAuth extends OncePerRequestFilter {
         //pegar a autenticação (usuario e senha)
         var authorization = request.getHeader("Authorization");
 
-        var user_password = authorization.substring("Basic".length()).trim(); //extrair conteudo (basic)
-        System.out.println("Authorization");
-        System.out.println(user_password);
+        var authEncoded = authorization.substring("Basic".length()).trim(); //extrair conteudo (basic)
+
+        byte[] authDecode =  Base64.getDecoder() .decode(authEncoded);
+
+        var authString = new String(authDecode);
+
+        String[] credentials = authString.split(":");
+        String username = credentials[0];
+        String password = credentials[1];
+
+        System.out.println(username);
+        System.out.println(password);
 
         //validar usuário 
         
