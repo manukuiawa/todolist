@@ -27,8 +27,8 @@ public class TaskController {
 
         //Para não conseguir criar uma tarefa com a data que já passou
         var currentDate = LocalDateTime.now();
-        if(currentDate.isAfter(taskModel.getStartAt())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A data de ìnicio deve ser maior do que a data atual");
+        if(currentDate.isAfter(taskModel.getStartAt()) || currentDate.isAfter(taskModel.getEndAt())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A data de ínicio/término deve ser maior do que a data atual");
         }
 
         var task = this.taskRepository.save(taskModel);
