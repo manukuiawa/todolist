@@ -21,6 +21,10 @@ public class TaskController {
     public TaskModel create(@RequestBody TaskModel taskModel, HttpServletRequest request)  {
         var idUser = request.getAttribute("idUser");
         taskModel.setIdUser((UUID)idUser);
+
+        //Para não conseguir criar uma tarefa com a data que já passou
+        var currentDate = localDateTime.now();
+
         var task = this.taskRepository.save(taskModel);
         return task; 
     }   
