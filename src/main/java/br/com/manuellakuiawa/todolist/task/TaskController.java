@@ -38,4 +38,6 @@ public class TaskController {
         var task = this.taskRepository.save(taskModel);
         return ResponseEntity.status(HttpStatus.OK).body(task); 
     }   
+
+    //listagem de tarefas
 }
