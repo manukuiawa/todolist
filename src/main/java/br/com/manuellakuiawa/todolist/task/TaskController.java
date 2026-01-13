@@ -48,4 +48,10 @@ public class TaskController {
         var tasks = this.taskRepository.findByIdUser((UUID)idUser);
         return tasks;
     }
+
+    //Listar updates 
+    public void update(@RequestBody TaskModel taskModel, HttpServletRequest request) {
+
+    }
 }
+
