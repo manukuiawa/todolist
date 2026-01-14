@@ -4,10 +4,15 @@ import java.beans.PropertyDescriptor;
 import java.util.Set;
 import java.util.HashSet;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class Utils {
+
+    public void copyNonNullProperties(Object source, Object target) {
+        BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
+    }
     
     public String[] getNullPropertyNames(Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);
@@ -23,5 +28,8 @@ public class Utils {
             emptyNames.add(pd.getName());
            }
         }
+
+        String[] result = new String [emptyNames.size()];
+        return emptyNames.toArray(result);
     }
 }
