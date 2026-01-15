@@ -59,6 +59,11 @@ public class TaskController {
 
         var idUser = request.getAttribute("idUser");
 
+        if(task == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Tarefa não encontrada!");
+        }
+
         if(!task.getIdUser().equals(idUser)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("Usuário não tem permissão para alterar esta tarefa!");
