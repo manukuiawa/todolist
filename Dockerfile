@@ -8,10 +8,9 @@ COPY . .
 
 RUN mvn clean package -DskipTests
 
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
-
 EXPOSE 8080
 
 COPY --from=build /app/target/todolist-0.0.1-SNAPSHOT.jar app.jar
